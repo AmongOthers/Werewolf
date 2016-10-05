@@ -1,0 +1,36 @@
+.inner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.swiper-indicator {
+    margin-bottom: 10rpx;
+}
+swiper {
+    width: 500rpx;
+    padding: 20rpx 0;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+}
+.item-container {
+    display: flex;
+    flex-direction: row;
+}
+.side-space {
+    width: 50rpx;
+    height: 100%;
+}
+.cover {
+    width: 400rpx;
+    height: 400rpx;
+}
+.role-logo {
+    width: 400rpx;
+    height: 400rpx;
+}
+.role-name {
+    padding: 10rpx 0 0 0;
+}
+.role-description {
+    padding: 10rpx 100rpx;
+}
