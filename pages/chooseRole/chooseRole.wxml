@@ -18,7 +18,9 @@
     </block>
     <block wx:else>
         <view class="inner-container">
-            <image src="{{choosedRole.logo}}" class="role-logo"></image>
+            <view class="role-log-container">
+                <image src="{{choosedRole.logo}}" class="role-logo {{roleLogoAfterAnimation}}"></image>
+            </view>
             <view class="role-name">你的角色是: {{choosedRole.name}}</view>
             <view class="role-description">{{choosedRole.description}}</view>
         </view>

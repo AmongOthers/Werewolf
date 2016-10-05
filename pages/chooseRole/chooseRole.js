@@ -8,7 +8,8 @@ Page({
         swiperCurrent: 1,
         isChoosing: true,
         roles:[],
-        choosedRole: {}
+        choosedRole: {},
+        roleLogoAfterAnimation: ""
     },
     onLoad: function() {
         var roles = [];
@@ -25,6 +26,11 @@ Page({
             roles: roles
         });
     },
+    onShow: function() {
+        this.setData({
+            roleLogoAfterAnimation: ""
+        });
+    },
     swiperCurrentChange: function(e) {
         var current = e.detail.current;
         this.setData({
@@ -36,5 +42,11 @@ Page({
             isChoosing: false,
             choosedRole: this.data.roles[this.data.swiperCurrent - 1]
         });
+        var that = this;
+        setTimeout(function() {
+            that.setData({
+                roleLogoAfterAnimation: "role-logo-after-animation",
+            });
+        }, 1);
     }
 });

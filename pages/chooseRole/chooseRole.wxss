@@ -24,9 +24,24 @@ swiper {
     width: 400rpx;
     height: 400rpx;
 }
-.role-logo {
+.role-log-container {
     width: 400rpx;
     height: 400rpx;
+    display: flex;
+    flex-direction: center;
+    justify-content: center;
+    align-items: center;
+}
+.role-logo {
+    width: 40rpx;
+    height: 40rpx;
+    opacity: 0;
+    transition: width 1s ease-in, height 1s ease-in;
+}
+.role-logo-after-animation {
+    width: 400rpx;
+    height: 400rpx;
+    opacity: 1;
 }
 .role-name {
     padding: 10rpx 0 0 0;
