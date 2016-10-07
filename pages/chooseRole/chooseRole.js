@@ -37,6 +37,11 @@ Page({
             swiperCurrent: current + 1 
         });
     },
+    setReady: function() {
+        wx.navigateTo({
+            url: "../playground/playground"
+        });
+    },
     chooseRole: function() {
         this.setData({
             isChoosing: false,

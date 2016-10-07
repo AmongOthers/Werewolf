@@ -48,4 +48,5 @@ swiper {
 }
 .role-description {
     padding: 10rpx 100rpx;
+    font-size: 0.8em;
 }

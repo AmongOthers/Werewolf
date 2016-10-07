@@ -1,0 +1,41 @@
+<!--index.wxml-->
+<import src="../../templates/history.wxml"/>
+
+<view class="container">
+  <view class="sky" animation="{{animationData}}">
+    <view class="day">
+      <image src="{{sun}}" class="sky-view"></image>
+    </view>
+    <view class="night">
+      <image src="{{moon}}" class="sky-view"></image>
+    </view>
+  </view>
+</view>
+<view class="board-container">
+  <view class="mask"></view>
+  <view class="board">
+    <view wx:if="{{isDay}}">白天</view>
+    <view wx:else>黑夜</view>
+    <scroll-view class="storyboard" scroll-x="true">
+      <block wx:for="{{storyboard.history}}">
+        <image catchtouchstart="touchHistory" catchtouchend="touchHistoryEnd" class="time-logo" src="{{sunLogo}}" wx:if="{{item.time == 'day'}}" data-history-index="{{index}}"></image>
+        <image catchtouchstart="touchHistory" catchtouchend="touchHistoryEnd" class="time-logo" src="{{moonLogo}}" wx:else data-history-index="{{index}}"></image>
+      </block>
+    </scroll-view>
+  </view>
+</view>
+<view class="history-view-container {{viewShown}}" wx:if="{{viewShown == 'view-shown'}}">
+  <view class="history-view">
+    <view wx:if="{{touchingTime == 'day'}}" class="history-banner">
+      <image src="{{sunLogo}}" class="history-logo"></image>
+    </view>
+    <view wx:else class="history-banner-dark">
+      <image src="{{moonLogo}}" class="history-logo"></image>
+    </view>
+    <view class="history-content">
+      <view wx:for="{{historyEvents}}" class="history-item">
+        <template is="{{item.type}}" data="{{...item}}"></template>
+      </view>
+    </view>
+  </view>
+</view>

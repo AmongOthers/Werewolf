@@ -1,0 +1,128 @@
+/**index.wxss**/
+.container {
+  justify-content: flex-start;
+  padding-top: 10rpx;
+  padding-bottom: 0rpx;
+  background-color: lightgray;
+}
+.board-container {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.mask {
+  width: 100%;
+  height: 160rpx;
+}
+.board {
+  width: 100%;
+  height: 1rpx;
+  background-color: white;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.storyboard {
+  width: 100%;
+  height: 88rpx;
+  border-top: 1px solid lightgray;
+  margin-top: 1px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  white-space: nowrap;
+}
+.time-logo {
+  width: 60rpx;
+  height: 60rpx;
+  padding: 14rpx 14rpx 0 14rpx;
+}
+.sky {
+  width: 300rpx;
+  height: 300rpx;
+  border-radius: 50%;
+  /*box-shadow: 0 0 2px 2px lightgray;*/
+  overflow: hidden;
+}
+.day {
+  width: 100%;
+  height: 50%;
+  background-color: deepskyblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.night {
+  width: 100%;
+  height: 50%;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+.sky-view {
+  width: 100rpx;
+  height: 100rpx;
+}
+.history-view-container {
+  position: absolute;
+  top: 160rpx;
+  bottom: 88rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.history-view {
+  width: 88%;
+  height: 88%;
+  border-radius: 16rpx;
+  overflow: hidden;
+  background-color: white;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.history-banner {
+  width: 100%;
+  height: 160rpx;
+  background-color: deepskyblue;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.history-banner-dark {
+  width: 100%;
+  height: 160rpx;
+  background-color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.history-logo {
+  width: 120rpx;
+  height: 120rpx;
+}
+.history-content {
+  flex-grow: 1;
+  padding: 24rpx 24rpx;
+}
+.history-item {
+  padding: 8rpx 0;
+}
+.view-shown {
+  background-color: rgba(0,0,0,0.5);
+}

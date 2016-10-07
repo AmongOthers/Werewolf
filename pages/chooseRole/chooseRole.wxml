@@ -24,6 +24,6 @@
             <view class="role-name">你的角色是: {{choosedRole.name}}</view>
             <view class="role-description">{{choosedRole.description}}</view>
         </view>
-        <button type="primary">准备好了</button>
+        <button type="primary" bindtap="setReady">准备好了</button>
     </block>
 </view>
