@@ -2,6 +2,7 @@
 var storyboard = require("../../engine/storyboard.js");
 var history = require("../../engine/history.js");
 var util = require("../../utils/util.js");
+var player = require("../../js/player.js");
 
 //获取应用实例
 var app = getApp()
@@ -16,7 +17,9 @@ Page({
     storyboard: {},
     viewShown: "",
     touchingTime: "day",
-    historyEvents: []
+    historyEvents: [],
+    players: player.players,
+    playerStubs: []
   },
   angle: 0,
   touchHistory: function(e) {
@@ -40,18 +43,24 @@ Page({
     }, 1000);
   },
   onLoad: function () {
+    var playerStubs = [];
+    var stubNumber = 4 - player.players.length % 4;
+    for(var i = 0; i < stubNumber; i++) {
+      playerStubs.push(i);
+    }
     storyboard.history = storyboard.history.reverse();
     this.setData({
-      storyboard: storyboard
+      storyboard: storyboard,
+      playerStubs: playerStubs
     });
   },
   intervalId: -1,
   timeoutId: -1,
   onShow: function() {
-    var that = this;
-    this.intervalId = setInterval(function() {
-      that.timeAfterTime();
-    }, 3000);
+    // var that = this;
+    // this.intervalId = setInterval(function() {
+    //   that.timeAfterTime();
+    // }, 3000);
   },
   onHide: function() {
     clearInterval(this.intervalId);

@@ -24,7 +24,7 @@ swiper {
     width: 400rpx;
     height: 400rpx;
 }
-.role-log-container {
+.role-logo-container {
     width: 400rpx;
     height: 400rpx;
     display: flex;

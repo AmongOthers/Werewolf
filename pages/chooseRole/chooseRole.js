@@ -27,8 +27,10 @@ Page({
         });
     },
     onShow: function () {
+    },
+    onHide: function () {
         this.setData({
-            roleLogoAnimationData: ""
+            roleLogoAnimationData: {}
         });
     },
     swiperCurrentChange: function (e) {
@@ -47,13 +49,16 @@ Page({
             isChoosing: false,
             choosedRole: this.data.roles[this.data.swiperCurrent - 1]
         });
-        var animation = wx.createAnimation({
-            duration: 2000,
-            timingFunction: 'ease'
-        });
-        animation.scale(10, 10).step();
-        this.setData({
-            roleLogoAnimationData: animation.export(),
-        });
+        var that = this;
+        setTimeout(function () {
+            var animation = wx.createAnimation({
+                duration: 2000,
+                timingFunction: 'ease'
+            });
+            animation.scale(10, 10).step();
+            that.setData({
+                roleLogoAnimationData: animation.export(),
+            });
+        }, 100);
     }
 });

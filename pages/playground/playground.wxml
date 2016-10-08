@@ -16,6 +16,13 @@
   <view class="board">
     <view wx:if="{{isDay}}">白天</view>
     <view wx:else>黑夜</view>
+    <view class="ground">
+      <view wx:for="{{players}}" class="player">
+        <image src="{{item.avatar}}" class="player-avatar"></image>
+        <view class="player-name">{{item.name}}</view>
+      </view>
+      <view wx:for="{{playerStubs}}" class="player-stub"></view>
+    </view>
     <scroll-view class="storyboard" scroll-x="true">
       <block wx:for="{{storyboard.history}}">
         <image catchtouchstart="touchHistory" catchtouchend="touchHistoryEnd" class="time-logo" src="{{sunLogo}}" wx:if="{{item.time == 'day'}}" data-history-index="{{index}}"></image>

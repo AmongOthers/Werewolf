@@ -28,6 +28,46 @@
   justify-content: space-between;
   box-sizing: border-box;
 }
+.ground {
+  width: 100%;
+  height: 1rpx;
+  flex-grow: 1;
+  box-sizing: border-box;
+  padding: 24rpx 24rpx;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: flex-start;
+}
+.player-stub {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 12rpx;
+}
+.player {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 128rpx;
+  height: 128rpx;
+  overflow: hidden;
+  margin: 12rpx;
+}
+.player-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  border: 1px solid lightgray;
+}
+.player-name {
+  width: 120rpx;
+  font-size: 0.8em;
+  white-space: nowrap;
+  text-align: center;
+}
 .storyboard {
   width: 100%;
   height: 88rpx;

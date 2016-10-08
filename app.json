@@ -1,8 +1,8 @@
 {
   "pages":[
+    "pages/playground/playground",
     "pages/index/index",
-    "pages/chooseRole/chooseRole",
-    "pages/playground/playground"
+    "pages/chooseRole/chooseRole"
   ],
   "window":{
     "backgroundTextStyle":"light",
