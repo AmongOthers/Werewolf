@@ -19,11 +19,15 @@ Page({
     touchingTime: "day",
     historyEvents: [],
     players: player.players,
-    playerStubs: []
+    playerStubs: [],
+    currentPlayerIndex: 4,
+    currentPlayerAnimationData: {},
+    biggerAnimationData: {},
+    originAnimationData: {}
   },
   angle: 0,
-  touchHistory: function(e) {
-    if(this.timeoutId != -1) {
+  touchHistory: function (e) {
+    if (this.timeoutId != -1) {
       clearTimeout(this.timeoutId);
     }
     var index = e.target.dataset.historyIndex;
@@ -34,9 +38,9 @@ Page({
       historyEvents: historyItem.events
     });
   },
-  touchHistoryEnd: function(e) {
+  touchHistoryEnd: function (e) {
     var that = this;
-    this.timeoutId = setTimeout(function() {
+    this.timeoutId = setTimeout(function () {
       that.setData({
         viewShown: ""
       });
@@ -45,7 +49,7 @@ Page({
   onLoad: function () {
     var playerStubs = [];
     var stubNumber = 4 - player.players.length % 4;
-    for(var i = 0; i < stubNumber; i++) {
+    for (var i = 0; i < stubNumber; i++) {
       playerStubs.push(i);
     }
     storyboard.history = storyboard.history.reverse();
@@ -56,18 +60,50 @@ Page({
   },
   intervalId: -1,
   timeoutId: -1,
-  onShow: function() {
+  scaleToBigger: true,
+  onShow: function () {
     // var that = this;
     // this.intervalId = setInterval(function() {
     //   that.timeAfterTime();
-    // }, 3000);
+    // }, 2000);
+    var biggerAnimation = wx.createAnimation({
+          duration: 500,
+          timingFunction: "ease"
+        });
+    biggerAnimation.scale(1.4, 1.4).step();
+    this.data.biggerAnimationData = biggerAnimation.export();
+
+    var originAnimation= wx.createAnimation({
+          duration: 500,
+          timingFunction: "ease"
+        });
+    originAnimation.scale(1, 1).step();
+    this.data.originAnimationData = originAnimation.export();
+    setInterval(function() {
+      var currentPlayerIndex = this.data.currentPlayerIndex;
+      this.setData({
+        currentPlayerIndex : (currentPlayerIndex < this.data.players.length - 1 ? currentPlayerIndex + 1 : 0)
+      });
+    }.bind(this), 4000);
+    setInterval(function () {
+      if (this.scaleToBigger) {
+        this.setData({
+          currentPlayerAnimationData: this.data.biggerAnimationData
+        });
+      } else {
+        this.setData({
+          currentPlayerAnimationData: this.data.originAnimationData
+        });
+      }
+      this.scaleToBigger = !this.scaleToBigger;
+    }.bind(this), 1000);
   },
-  onHide: function() {
+  onHide: function () {
     clearInterval(this.intervalId);
   },
-  timeAfterTime: function() {
+  timeAfterTime: function () {
     this.angle = this.angle + 180;
-    if(this.data.isDay) {
+    if (this.data.isDay) {
       var animation = wx.createAnimation({
         duration: 2000,
         timingFunction: 'ease'

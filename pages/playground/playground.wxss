@@ -42,31 +42,45 @@
   align-content: flex-start;
 }
 .player-stub {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 12rpx;
+  width: 156rpx;
+  height: 160rpx;
+  margin: 4rpx;
 }
 .player {
+  width: 156rpx;
+  height: 160rpx;
+  margin: 4rpx;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 128rpx;
-  height: 128rpx;
   overflow: hidden;
-  margin: 12rpx;
 }
 .player-avatar {
-  width: 80rpx;
-  height: 80rpx;
+  width: 68rpx;
+  height: 68rpx;
   border-radius: 50%;
-  border: 1px solid lightgray;
+  /*border: 1px solid lightgray;*/
 }
 .player-name {
-  width: 120rpx;
+  width: 156rpx;
   font-size: 0.8em;
   white-space: nowrap;
   text-align: center;
+}
+.current-player-avatar {
+  box-shadow: 0 0 4px 4px yellow;
+  width: 68rpx;
+  height: 68rpx;
+  /*width: 108rpx;
+  height: 108rpx;*/
+  border: 0;
+}
+.coming-player-avatar {
+  opacity: 0.4;
+}
+.coming-player-name {
+  color: lightgray;
 }
 .storyboard {
   width: 100%;

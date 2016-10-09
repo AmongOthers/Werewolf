@@ -17,10 +17,20 @@
     <view wx:if="{{isDay}}">白天</view>
     <view wx:else>黑夜</view>
     <view class="ground">
-      <view wx:for="{{players}}" class="player">
-        <image src="{{item.avatar}}" class="player-avatar"></image>
-        <view class="player-name">{{item.name}}</view>
-      </view>
+      <block wx:for="{{players}}">
+        <view wx:if="{{index == currentPlayerIndex}}" class="player">
+          <image src="{{item.avatar}}" class="player-avatar current-player-avatar" animation="{{currentPlayerAnimationData}}"></image>
+          <view class="player-name">{{item.name}}</view>
+        </view>
+        <view wx:elif="{{index < currentPlayerIndex}}" class="player">
+          <image src="{{item.avatar}}" class="player-avatar" animation="{{originAnimationData}}"></image>
+          <view class="player-name">{{item.name}}</view>
+        </view>
+        <view wx:else class="player">
+          <image src="{{item.avatar}}" class="player-avatar coming-player-avatar" animation="{{originAnimationData}}"></image>
+          <view class="player-name coming-player-name">{{item.name}}</view>
+        </view>
+      </block>
       <view wx:for="{{playerStubs}}" class="player-stub"></view>
     </view>
     <scroll-view class="storyboard" scroll-x="true">
