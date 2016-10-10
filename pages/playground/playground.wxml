@@ -3,17 +3,17 @@
 
 <view class="container">
   <view class="sky" animation="{{animationData}}">
-    <view class="night">
-      <image src="{{moon}}" class="sky-view"></image>
-    </view>
     <view class="day">
       <image src="{{sun}}" class="sky-view"></image>
+    </view>
+    <view class="night">
+      <image src="{{moon}}" class="sky-view"></image>
     </view>
   </view>
 </view>
 <view class="board-container">
-  <view class="mask"></view>
-  <view class="board">
+  <view class="mask" bindtap="timeAfterTime"></view>
+  <view class="board" animation="{{boardAnimationData}}">
     <block wx:if="{{isDay}}">
       <view class="ground-title">白天</view>
       <view class="ground">

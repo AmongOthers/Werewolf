@@ -12,7 +12,7 @@ Page({
     moon: "../../images/moon.png",
     sunLogo: "../../images/sun-logo.png",
     moonLogo: "../../images/moon-logo.png",
-    isDay: false,
+    isDay: true,
     animationData: {},
     storyboard: {},
     viewShown: "",
@@ -23,7 +23,8 @@ Page({
     currentPlayerIndex: 4,
     currentPlayerAnimationData: {},
     biggerAnimationData: {},
-    originAnimationData: {}
+    originAnimationData: {},
+    boardAnimationData: {}
   },
   angle: 0,
   intervalId: -1,
@@ -122,22 +123,33 @@ Page({
         timingFunction: 'ease'
       });
       animation.rotate(this.angle).step();
+      var boardAnimation = wx.createAnimation({
+        duration: 2000,
+        timingFunction: "ease"
+      });
+      boardAnimation.backgroundColor("#808080").step();
       this.setData({
-        animationData: animation.export()
+        animationData: animation.export(),
+        boardAnimationData: boardAnimation.export(),
+        isDay: !this.data.isDay
       });
     } else {
       var animation = wx.createAnimation({
         duration: 2000,
         timingFunction: 'ease'
       });
+      var boardAnimation = wx.createAnimation({
+        duration: 2000,
+        timingFunction: "ease"
+      });
+      boardAnimation.backgroundColor("#ffffff").step();
       animation.rotate(this.angle).step();
       this.setData({
-        animationData: animation.export()
+        animationData: animation.export(),
+        boardAnimationData: boardAnimation.export(),
+        isDay: !this.data.isDay
       });
     }
-    this.setData({
-      isDay: !this.data.isDay
-    });
   },
   canvastouchstart: function (e) {
     e.touches.forEach(function (item) {

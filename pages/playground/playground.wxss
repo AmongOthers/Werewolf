@@ -42,7 +42,7 @@
   align-content: flex-start;
 }
 .night-ground {
-  background-color: gray;
+  /*background-color: gray;*/
 }
 .ground-title {
   width: 100%;
@@ -50,7 +50,7 @@
   padding: 10rpx 0;
 }
 .night-ground-title {
-  background-color: gray;
+  /*background-color: gray;*/
   color: lightgray;
 }
 .wolf-ground {
