@@ -41,6 +41,28 @@
   align-items: center;
   align-content: flex-start;
 }
+.night-ground {
+  background-color: gray;
+}
+.ground-title {
+  width: 100%;
+  text-align: center;
+  padding: 10rpx 0;
+}
+.night-ground-title {
+  background-color: gray;
+  color: lightgray;
+}
+.wolf-ground {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 160rpx;
+  /*padding-top: 160rpx;
+  padding-bottom: 88rpx;*/
+  box-sizing: border-box;
+}
 .player-stub {
   width: 156rpx;
   height: 160rpx;
@@ -67,6 +89,10 @@
   font-size: 0.8em;
   white-space: nowrap;
   text-align: center;
+  padding-top: 2rpx;
+}
+.night-player-name {
+  color: lightgray;
 }
 .current-player-avatar {
   box-shadow: 0 0 4px 4px yellow;

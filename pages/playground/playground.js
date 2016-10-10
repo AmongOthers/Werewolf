@@ -12,7 +12,7 @@ Page({
     moon: "../../images/moon.png",
     sunLogo: "../../images/sun-logo.png",
     moonLogo: "../../images/moon-logo.png",
-    isDay: true,
+    isDay: false,
     animationData: {},
     storyboard: {},
     viewShown: "",
@@ -26,6 +26,10 @@ Page({
     originAnimationData: {}
   },
   angle: 0,
+  intervalId: -1,
+  timeoutId: -1,
+  scaleToBigger: true,
+  pxRatio: 1,
   touchHistory: function (e) {
     if (this.timeoutId != -1) {
       clearTimeout(this.timeoutId);
@@ -57,46 +61,55 @@ Page({
       storyboard: storyboard,
       playerStubs: playerStubs
     });
+    wx.getSystemInfo({
+      success: function (res) {
+        var windowWidth = res.windowWidth;
+        this.pxRatio = 750 / windowWidth;
+        // console.log(res.model)
+        // console.log(res.pixelRatio)
+        // console.log(res.windowWidth)
+        // console.log(res.windowHeight)
+        // console.log(res.language)
+        // console.log(res.version)
+      }.bind(this)
+    })
   },
-  intervalId: -1,
-  timeoutId: -1,
-  scaleToBigger: true,
   onShow: function () {
     // var that = this;
     // this.intervalId = setInterval(function() {
     //   that.timeAfterTime();
     // }, 2000);
     var biggerAnimation = wx.createAnimation({
-          duration: 500,
-          timingFunction: "ease"
-        });
+      duration: 500,
+      timingFunction: "ease"
+    });
     biggerAnimation.scale(1.4, 1.4).step();
     this.data.biggerAnimationData = biggerAnimation.export();
 
-    var originAnimation= wx.createAnimation({
-          duration: 500,
-          timingFunction: "ease"
-        });
+    var originAnimation = wx.createAnimation({
+      duration: 500,
+      timingFunction: "ease"
+    });
     originAnimation.scale(1, 1).step();
     this.data.originAnimationData = originAnimation.export();
-    setInterval(function() {
-      var currentPlayerIndex = this.data.currentPlayerIndex;
-      this.setData({
-        currentPlayerIndex : (currentPlayerIndex < this.data.players.length - 1 ? currentPlayerIndex + 1 : 0)
-      });
-    }.bind(this), 4000);
-    setInterval(function () {
-      if (this.scaleToBigger) {
-        this.setData({
-          currentPlayerAnimationData: this.data.biggerAnimationData
-        });
-      } else {
-        this.setData({
-          currentPlayerAnimationData: this.data.originAnimationData
-        });
-      }
-      this.scaleToBigger = !this.scaleToBigger;
-    }.bind(this), 1000);
+    // setInterval(function() {
+    //   var currentPlayerIndex = this.data.currentPlayerIndex;
+    //   this.setData({
+    //     currentPlayerIndex : (currentPlayerIndex < this.data.players.length - 1 ? currentPlayerIndex + 1 : 0)
+    //   });
+    // }.bind(this), 4000);
+    // setInterval(function () {
+    //   if (this.scaleToBigger) {
+    //     this.setData({
+    //       currentPlayerAnimationData: this.data.biggerAnimationData
+    //     });
+    //   } else {
+    //     this.setData({
+    //       currentPlayerAnimationData: this.data.originAnimationData
+    //     });
+    //   }
+    //   this.scaleToBigger = !this.scaleToBigger;
+    // }.bind(this), 1000);
   },
   onHide: function () {
     clearInterval(this.intervalId);
@@ -125,5 +138,35 @@ Page({
     this.setData({
       isDay: !this.data.isDay
     });
+  },
+  canvastouchstart: function (e) {
+    e.touches.forEach(function (item) {
+      this.drawFlag(item);
+    }.bind(this));
+  },
+  canvastouchend: function (e) {
+    e.touches.forEach(function (item) {
+      this.drawFlag(item);
+    }.bind(this));
+  },
+  canvastouchmove: function (e) {
+    e.touches.forEach(function (item) {
+      this.drawFlag(item);
+    }.bind(this));
+  },
+  drawFlag: function(touch) {
+      var x = touch.clientX;
+      var y = touch.clientY - 160 / this.pxRatio;
+      var context = wx.createContext();
+      context.beginPath();
+      context.setFillStyle("#ff0000");
+      context.arc(x, y, 8, 0, Math.PI * 2, true); 
+      context.fill();
+      context.fillText("大马尾", x - 4, y - 12);
+      context.closePath();
+      wx.drawCanvas({
+        canvasId: "wolf-ground",
+        actions: context.getActions()
+      });
   }
 })
