@@ -26,11 +26,17 @@ Page({
     originAnimationData: {},
     boardAnimationData: {}
   },
+  name: "曾我部",
+  room: 1,
   angle: 0,
   intervalId: -1,
   timeoutId: -1,
   scaleToBigger: true,
+  windowWidth: 0,
   pxRatio: 1,
+  locationX: 0,
+  locationY: 0,
+  players: [],
   touchHistory: function (e) {
     if (this.timeoutId != -1) {
       clearTimeout(this.timeoutId);
@@ -65,15 +71,51 @@ Page({
     wx.getSystemInfo({
       success: function (res) {
         var windowWidth = res.windowWidth;
+        this.windowWidth = windowWidth;
         this.pxRatio = 750 / windowWidth;
-        // console.log(res.model)
-        // console.log(res.pixelRatio)
-        // console.log(res.windowWidth)
-        // console.log(res.windowHeight)
-        // console.log(res.language)
-        // console.log(res.version)
       }.bind(this)
     })
+    wx.connectSocket({
+      url: "ws://localhost:8080"
+    });
+    wx.onSocketOpen(function (res) {
+      var initPlayer = {
+        type: "init",
+        room: this.room,
+        name: this.name
+      };
+      wx.sendSocketMessage({
+        data: JSON.stringify(initPlayer)
+      });
+    }.bind(this));
+    wx.onSocketMessage(function (res) {
+      var data = res.data;
+      var players = JSON.parse(data);
+      this.players = players;
+      this.updateCanvas();
+    }.bind(this));
+  },
+  updateCanvas: function () {
+    var context = wx.createContext();
+    for (var i = 0; i < this.players.length; i++) {
+      var player = this.players[i];
+      var x, y;
+      if (player.name == this.name) {
+        x = this.locationX;
+        y = this.locationY;
+      } else {
+        var ratio = this.windowWidth / player.w;
+        x = player.x * ratio;
+        y = player.y * ratio;
+      }
+      context.setFillStyle("#ff0000");
+      context.drawImage("../../images/paw.png", x - 15, y - 15, 30, 30);
+      context.fillText(player.name, x - 15, y - 15);
+    }
+    wx.drawCanvas({
+      canvasId: "wolf-ground",
+      actions: context.getActions()
+    });
   },
   onShow: function () {
     // var that = this;
@@ -153,32 +195,37 @@ Page({
   },
   canvastouchstart: function (e) {
     e.touches.forEach(function (item) {
-      this.drawFlag(item);
+      this.sendLocation(item);
     }.bind(this));
   },
   canvastouchend: function (e) {
     e.touches.forEach(function (item) {
-      this.drawFlag(item);
+      this.sendLocation(item);
     }.bind(this));
   },
   canvastouchmove: function (e) {
     e.touches.forEach(function (item) {
-      this.drawFlag(item);
+      this.sendLocation(item);
     }.bind(this));
   },
-  drawFlag: function(touch) {
-      var x = touch.clientX;
-      var y = touch.clientY - 160 / this.pxRatio;
-      var context = wx.createContext();
-      context.beginPath();
-      context.setFillStyle("#ff0000");
-      context.arc(x, y, 8, 0, Math.PI * 2, true); 
-      context.fill();
-      context.fillText("大马尾", x - 4, y - 12);
-      context.closePath();
-      wx.drawCanvas({
-        canvasId: "wolf-ground",
-        actions: context.getActions()
-      });
+  sendLocation: function (touch) {
+    var x = touch.clientX;
+    var y = touch.clientY - 160 / this.pxRatio;
+    var context = wx.createContext();
+    this.locationX = x;
+    this.locationY = y;
+    this.updateCanvas();
+    var message = {
+      type: "update",
+      name: this.name,
+      room: this.room,
+      x: x,
+      y: y,
+      w: this.windowWidth,
+      h: 0
+    };
+    wx.sendSocketMessage({
+      data: JSON.stringify(message)
+    });
   }
 })

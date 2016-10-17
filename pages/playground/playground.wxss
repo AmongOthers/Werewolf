@@ -12,6 +12,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .mask {
   width: 100%;
