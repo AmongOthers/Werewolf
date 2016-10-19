@@ -45,7 +45,12 @@
       <view class="ground-title night-ground-title">黑夜</view>
       <view class="ground night-ground">
         <block wx:for="{{players}}">
-          <view class="player">
+          <view wx:if="{{index == killedPlayerIndex}}" class="player">
+            <image src="{{item.avatar}}" class="player-avatar" animation="{{originAnimationData}}"></image>
+            <view class="player-name night-player-name">{{item.name}}</view>
+            <image src="{{clawmark}}" class="clawmark" animation="{{clawAnimationData}}"></image>
+          </view>
+          <view wx:else class="player">
             <image src="{{item.avatar}}" class="player-avatar" animation="{{originAnimationData}}"></image>
             <view class="player-name night-player-name">{{item.name}}</view>
           </view>

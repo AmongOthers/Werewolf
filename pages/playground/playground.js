@@ -3,6 +3,7 @@ var storyboard = require("../../engine/storyboard.js");
 var history = require("../../engine/history.js");
 var util = require("../../utils/util.js");
 var player = require("../../js/player.js");
+var eventbus = require("../../js/EventBus.js");
 
 //获取应用实例
 var app = getApp()
@@ -12,6 +13,7 @@ Page({
     moon: "../../images/moon.png",
     sunLogo: "../../images/sun-logo.png",
     moonLogo: "../../images/moon-logo.png",
+    clawmark: "../../images/clawmark.png",
     isDay: true,
     animationData: {},
     storyboard: {},
@@ -24,10 +26,10 @@ Page({
     currentPlayerAnimationData: {},
     biggerAnimationData: {},
     originAnimationData: {},
-    boardAnimationData: {}
+    boardAnimationData: {},
+    clawAnimationData: {},
+    killedPlayerIndex: 0
   },
-  name: "曾我部",
-  room: 1,
   angle: 0,
   intervalId: -1,
   timeoutId: -1,
@@ -37,6 +39,7 @@ Page({
   locationX: 0,
   locationY: 0,
   players: [],
+  isSocketOpen: false,
   touchHistory: function (e) {
     if (this.timeoutId != -1) {
       clearTimeout(this.timeoutId);
@@ -72,35 +75,25 @@ Page({
       success: function (res) {
         var windowWidth = res.windowWidth;
         this.windowWidth = windowWidth;
+        var windowHeight = res.windowHeight;
+        this.windowHeight = windowHeight;
         this.pxRatio = 750 / windowWidth;
       }.bind(this)
     })
-    wx.connectSocket({
-      url: "ws://localhost:8080"
-    });
-    wx.onSocketOpen(function (res) {
-      var initPlayer = {
-        type: "init",
-        room: this.room,
-        name: this.name
-      };
-      wx.sendSocketMessage({
-        data: JSON.stringify(initPlayer)
-      });
-    }.bind(this));
-    wx.onSocketMessage(function (res) {
+    eventbus.addEventListener("playerLocationUpdate", function(event, res) {
       var data = res.data;
       var players = JSON.parse(data);
       this.players = players;
       this.updateCanvas();
-    }.bind(this));
+    }, this);
+    this.players.push({ name: app.globalData.name });
   },
   updateCanvas: function () {
     var context = wx.createContext();
     for (var i = 0; i < this.players.length; i++) {
       var player = this.players[i];
       var x, y;
-      if (player.name == this.name) {
+      if (player.name == app.globalData.name) {
         x = this.locationX;
         y = this.locationY;
       } else {
@@ -175,6 +168,16 @@ Page({
         boardAnimationData: boardAnimation.export(),
         isDay: !this.data.isDay
       });
+      setTimeout(function () {
+        var clawAnimation = wx.createAnimation({
+          duration: 2000,
+          timingFunction: 'ease'
+        });
+        clawAnimation.translate(-80 / this.pxRatio, 160 / this.pxRatio).step();
+        this.setData({
+          clawAnimationData: clawAnimation.export()
+        });
+      }.bind(this), 2000);
     } else {
       var animation = wx.createAnimation({
         duration: 2000,
@@ -195,37 +198,33 @@ Page({
   },
   canvastouchstart: function (e) {
     e.touches.forEach(function (item) {
-      this.sendLocation(item);
+      this.updateLocation(item);
     }.bind(this));
   },
   canvastouchend: function (e) {
     e.touches.forEach(function (item) {
-      this.sendLocation(item);
+      this.updateLocation(item);
     }.bind(this));
   },
   canvastouchmove: function (e) {
     e.touches.forEach(function (item) {
-      this.sendLocation(item);
+      this.updateLocation(item);
     }.bind(this));
   },
-  sendLocation: function (touch) {
+  updateLocation: function (touch) {
     var x = touch.clientX;
     var y = touch.clientY - 160 / this.pxRatio;
     var context = wx.createContext();
     this.locationX = x;
     this.locationY = y;
     this.updateCanvas();
-    var message = {
-      type: "update",
-      name: this.name,
-      room: this.room,
+    
+    var location = {
       x: x,
       y: y,
       w: this.windowWidth,
-      h: 0
+      h: this.windowHeight
     };
-    wx.sendSocketMessage({
-      data: JSON.stringify(message)
-    });
+    eventbus.dispatch("locationUpdate", this, location);
   }
 })
