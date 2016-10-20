@@ -28,7 +28,8 @@ Page({
     originAnimationData: {},
     boardAnimationData: {},
     clawAnimationData: {},
-    killedPlayerIndex: 0
+    markingPlayerIndex: -1,
+    markedPlayerIndex: -1
   },
   angle: 0,
   intervalId: -1,
@@ -80,13 +81,27 @@ Page({
         this.pxRatio = 750 / windowWidth;
       }.bind(this)
     })
-    eventbus.addEventListener("playerLocationUpdate", function(event, res) {
-      var data = res.data;
-      var players = JSON.parse(data);
-      this.players = players;
+    eventbus.addEventListener("roomLocationUpdate", function (event, data) {
+      this.players = data.players;
       this.updateCanvas();
     }, this);
+    eventbus.addEventListener("roomPlayerMarked", function(event, data) {
+      this.setData({
+        markedPlayerIndex: data.markedPlayerIndex
+      });
+      this.setMarked();
+    }, this);
     this.players.push({ name: app.globalData.name });
+  },
+  setMarked: function() {
+      var clawAnimation = wx.createAnimation({
+        duration: 2000,
+        timingFunction: 'ease'
+      });
+      clawAnimation.translate(-80 / this.pxRatio, 160 / this.pxRatio).step();
+      this.setData({
+        clawAnimationData: clawAnimation.export()
+      });
   },
   updateCanvas: function () {
     var context = wx.createContext();
@@ -168,16 +183,6 @@ Page({
         boardAnimationData: boardAnimation.export(),
         isDay: !this.data.isDay
       });
-      setTimeout(function () {
-        var clawAnimation = wx.createAnimation({
-          duration: 2000,
-          timingFunction: 'ease'
-        });
-        clawAnimation.translate(-80 / this.pxRatio, 160 / this.pxRatio).step();
-        this.setData({
-          clawAnimationData: clawAnimation.export()
-        });
-      }.bind(this), 2000);
     } else {
       var animation = wx.createAnimation({
         duration: 2000,
@@ -218,8 +223,8 @@ Page({
     this.locationX = x;
     this.locationY = y;
     this.updateCanvas();
-    
-    var columnWidth = this.windowWidth /4;
+
+    var columnWidth = this.windowWidth / 4;
     var column = Math.floor(x / columnWidth);
     var hSpace = 68 / 2 / this.pxRatio;
     var hCenter = column * columnWidth + columnWidth / 2;
@@ -230,22 +235,33 @@ Page({
     var topSpace = 68 / 2 / this.pxRatio;
     var bottomSpace = topSpace * 1.5; //命中文字的范围适当放宽一点
     var center = row * playerHeightInCanvas + playerHeightInCanvas / 2;
-    if(center - topSpace <= canvasY && canvasY <= center + bottomSpace &&
-    hCenter - hSpace <= x && x <= hCenter + hSpace) {
-      this.setData({
-        markingPlayerIndex: row * 4 + column
-      });
+
+    var markingPlayerIndex = row * 4 + column;
+    // TODO 测试的时候不做markingPlayerIndex和players长度的检查
+    if (true || markingPlayerIndex < this.players.length) {
+      if (center - topSpace <= canvasY && canvasY <= center + bottomSpace &&
+        hCenter - hSpace <= x && x <= hCenter + hSpace) {
+        this.setData({
+          markingPlayerIndex: row * 4 + column
+        });
+      } else {
+        this.setData({
+          markingPlayerIndex: -1
+        });
+      }
     } else {
-      this.setData({
-        markingPlayerIndex: -1
-      });
+      markingPlayerIndex = -1;
     }
+
 
     var location = {
       x: x,
       y: y,
       w: this.windowWidth,
-      h: this.windowHeight
+      h: this.windowHeight,
+      column: column,
+      row: row,
+      index: markingPlayerIndex
     };
     eventbus.dispatch("locationUpdate", this, location);
   }

@@ -12,7 +12,10 @@ App({
         x: location.x,
         y: location.y,
         w: location.w,
-        h: location.h 
+        h: location.h,
+        column: location.column,
+        row: location.row,
+        index: location.index
       };
       if (this.isSocketOpen) {
         wx.sendSocketMessage({
@@ -43,7 +46,9 @@ App({
       this.isSocketOpen = true;
     }.bind(this));
     wx.onSocketMessage(function (res) {
-      eventbus.dispatch("playerLocationUpdate", this, res);
+      var data = JSON.parse(res.data);
+      var type = data.type;
+      eventbus.dispatch(type, this, data);
     }.bind(this));
     wx.onSocketError(function (res) {
       this.isSocketOpen = false;
