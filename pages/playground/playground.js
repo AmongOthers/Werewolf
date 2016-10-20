@@ -219,6 +219,28 @@ Page({
     this.locationY = y;
     this.updateCanvas();
     
+    var columnWidth = this.windowWidth /4;
+    var column = Math.floor(x / columnWidth);
+    var hSpace = 68 / 2 / this.pxRatio;
+    var hCenter = column * columnWidth + columnWidth / 2;
+    column = column > 3 ? 3 : column;
+    var canvasY = y - (80 / this.pxRatio);
+    var playerHeightInCanvas = 160 / this.pxRatio;
+    var row = Math.floor(canvasY / playerHeightInCanvas);
+    var topSpace = 68 / 2 / this.pxRatio;
+    var bottomSpace = topSpace * 1.5; //命中文字的范围适当放宽一点
+    var center = row * playerHeightInCanvas + playerHeightInCanvas / 2;
+    if(center - topSpace <= canvasY && canvasY <= center + bottomSpace &&
+    hCenter - hSpace <= x && x <= hCenter + hSpace) {
+      this.setData({
+        markingPlayerIndex: row * 4 + column
+      });
+    } else {
+      this.setData({
+        markingPlayerIndex: -1
+      });
+    }
+
     var location = {
       x: x,
       y: y,

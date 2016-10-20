@@ -34,7 +34,7 @@
   height: 1rpx;
   flex-grow: 1;
   box-sizing: border-box;
-  padding: 24rpx 24rpx;
+  padding: 0rpx 0rpx;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -49,6 +49,8 @@
   width: 100%;
   text-align: center;
   padding: 10rpx 0;
+  box-sizing: border-box;
+  height: 80rpx;
 }
 .night-ground-title {
   /*background-color: gray;*/
@@ -103,6 +105,10 @@
   /*width: 108rpx;
   height: 108rpx;*/
   border: 0;
+}
+.current-marking-avatar {
+  width: 96rpx;
+  height: 96rpx;
 }
 .coming-player-avatar {
   opacity: 0.4;
