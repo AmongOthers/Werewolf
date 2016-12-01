@@ -1,0 +1,62 @@
+.ground-container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.ground {
+  width: 100%;
+  height: 1rpx;
+  flex-grow: 1;
+  padding: 0rpx 0rpx;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: flex-start;
+}
+.player-stub {
+  width: 156rpx;
+  height: 160rpx;
+  margin: 4rpx;
+}
+.player {
+  width: 156rpx;
+  height: 160rpx;
+  margin: 4rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.player-avatar {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+}
+.player-name {
+  width: 156rpx;
+  font-size: 0.8em;
+  white-space: nowrap;
+  text-align: center;
+  padding-top: 2rpx;
+}
+.current-marking-avatar {
+  width: 96rpx;
+  height: 96rpx;
+}
+.canvas-ground {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0; 
+  left: 0;
+  box-sizing: border-box;
+}

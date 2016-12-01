@@ -1,18 +1,29 @@
 var player = require("../../js/player.js");
+var playground = require("../../js/playground.js");
 
 var app = getApp();
 Page({
     data: {
         players: player.players,
         playerStubs: [],
-        titlebarImage: "../../images/wheat.png",
-        arrowImage: "../../images/arrow.png",
-        isGoingToFire: false,
-        bowImage: "../../images/bow.png",
-        bowAndArrowImage: "../../images/bow-arrow.png",
-        bowAnimationData: {},
-        bowAndArrowAnimationData: {}
+        titleObj: {
+            title: "猎人之章",
+            titlebarImage: "../../images/wheat.png"
+        },
+        playersObj: {
+            players: [],
+            playerStubs: [],
+            markingPlayerIndex: -1
+        },
+        actionObj: {
+            isGoingToAction: false,
+            beforeActionImage: "../../images/bow-arrow.png",
+            beforeActionAnimationData: {},
+            afterActionImage: "../../images/bow.png",
+            afterActionAnimationData: {}
+        }
     },
+    arrowImage: "../../images/arrow.png",
     arrowImageWidthInPx: 10,
     arrowImageHeightInPx: 80,
     arrowSpeedIn100ms: 100,
@@ -27,18 +38,25 @@ Page({
         for (var i = 0; i < stubNumber; i++) {
             playerStubs.push(i);
         }
-        this.setData({
+        var playersObj = {
+            players: player.players,
             playerStubs: playerStubs,
-        });
+            markingPlayerIndex: -1
+        };
+        this.setData({
+            playersObj: playersObj
+        }); 
+        playground.extend(app, this);
         //微信小程序在开发者工具上调用drawImage，第一次总会报错undefined，所以使用这种方式来避免报错
         var context = wx.createContext();
         context.drawImage("../../images/arrow.png", 0, 0, 0, 0);
         wx.drawCanvas({
-            canvasId: "hunter-ground",
+            canvasId: "canvas-ground",
             actions: context.getActions()
         });
     },
     onShow: function() {
+        //计算一些关键坐标
         var hunterAreaWidthInRpx = 400;
         var hunterAreaHeightInRpx = 200;
         var bowImageWidth = 186;
@@ -80,21 +98,6 @@ Page({
         console.log("center anchor: (x: " + this.centerAnchorInCanvas.x + " , y: " + this.centerAnchorInCanvas.y + ")");
         console.log("arrow anchor: (x: " + this.arrowAnchorInCanvas.x + " , y: " + this.arrowAnchorInCanvas.y + ")");
         console.log("bowAreaCenterInCanvas: (x: " + this.bowAreaCenterInCanvas.x + " , y: " + this.bowAreaCenterInCanvas.y + ")");
-    },
-    bowGroundTouchStart: function(e) {
-    },
-    bowGroundTouchMove: function(e) {
-        this.touches = e.touches;
-        this.touches.forEach(function (item) {
-            this.selectTarget(item);
-        }.bind(this))
-    },
-    bowGroundTouchEnd: function() {
-        // if(this.markingPlayerIndex >= 0) {
-        //     this.setData({
-        //         isGoingToFire: true
-        //     });
-        // }
     },
     drawArrow(index) {
         var pxRatio = app.globalData.pxRatio;
@@ -150,46 +153,12 @@ Page({
         context.save();
         context.translate(this.bowAreaCenterInCanvas.x, this.bowAreaCenterInCanvas.y);
         context.rotate(angle * Math.PI / 180);
-        context.drawImage("../../images/arrow.png", 0, start, this.arrowImageWidthInPx, this.arrowImageHeightInPx);
+        context.drawImage(this.arrowImage, 0, start, this.arrowImageWidthInPx, this.arrowImageHeightInPx);
         context.restore();
         wx.drawCanvas({
-            canvasId: "hunter-ground",
+            canvasId: "canvas-ground",
             actions: context.getActions()
         });
-    },
-    selectTarget: function (touch) {
-        var pxRatio = app.globalData.pxRatio;
-        var windowWidth = app.globalData.windowWidth;
-        var x = touch.clientX;
-        var y = touch.clientY - 120 / pxRatio;
-
-        var columnWidth = windowWidth / 4;
-        var column = Math.floor(x / columnWidth);
-        var hSpace = 68 / 2 / pxRatio;
-        var hCenter = column * columnWidth + columnWidth / 2;
-        column = column > 3 ? 3 : column;
-
-        var playerHeight = 160 / pxRatio;
-        var row = Math.floor(y / playerHeight);
-        var topSpace = 68 / 2 / pxRatio;
-        var bottomSpace = topSpace * 1.5; //命中文字的范围适当放宽一点
-        var center = row * playerHeight + playerHeight / 2;
-        this.markingPlayerIndex = row * 4 + column;
-        if (this.markingPlayerIndex < this.data.players.length && this.markingPlayerIndex != this.data.killedPlayerIndex && center - topSpace <= y && y <= center + bottomSpace &&
-            hCenter - hSpace <= x && x <= hCenter + hSpace) {
-            this.setData({
-                markingPlayerIndex: this.markingPlayerIndex
-            });
-        } else {
-            this.markingPlayerIndex = -1;
-            this.setData({
-                markingPlayerIndex: -1
-            });
-        }
-        if(this.markingPlayerIndex >= 0) {
-            this.targetSelected(this.markingPlayerIndex);
-        }
-        console.log("markingPlayerIndex: " + this.markingPlayerIndex);
     },
     targetSelected: function(index) {
         var pxRatio = app.globalData.pxRatio;
@@ -215,25 +184,34 @@ Page({
         } else {
             bowAndArrowAnimation.rotateZ(90 + angle * 180 / Math.PI).step();
         }
+        var playersObj = this.data.playersObj;
+        playersObj.markingPlayerIndex = index;
+        var actionObj = this.data.actionObj;
+        actionObj.beforeActionAnimationData = bowAndArrowAnimation.export();
         this.setData({
-            bowAndArrowAnimationData: bowAndArrowAnimation.export()
+            actionObj: actionObj,
+            playersObj: playersObj
         });
     },
-    leftAction: function() {
+    sureAction: function() {
+        var actionObj = this.data.actionObj;
+        actionObj.isGoingToAction = true;
         this.setData({
-            isGoingToFire: true
+            actionObj: actionObj
         });
-        this.drawArrow(this.markingPlayerIndex);
+        this.drawArrow(this.data.playersObj.markingPlayerIndex);
     },
-    rightAction: function() {
+    cancelAction: function() {
         var bowAndArrowAnimation = wx.createAnimation({
             duration: 100,
             timingFunction: 'ease'
         });
         bowAndArrowAnimation.rotateZ(0).step();
+        var actionObj = this.data.actionObj;
+        actionObj.beforeActionAnimationData = bowAndArrowAnimation.export();
         this.setData({
             markingPlayerIndex: -1,
-            bowAndArrowAnimationData: bowAndArrowAnimation.export()
+            actionObj: actionObj
         });
     }
 })

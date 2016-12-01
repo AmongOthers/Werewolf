@@ -1,0 +1,7 @@
+<template name="titlebar">
+	<view class="titlebar">
+		<image class="titlebar-image titlebar-left" src="{{titlebarImage}}"></image>
+		<view class="titlebar-name">{{title}}</view>
+		<image class="titlebar-image titlebar-right" src="{{titlebarImage}}"></image>
+	</view>
+</template>

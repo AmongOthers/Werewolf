@@ -1,0 +1,10 @@
+<template name="action-area">
+	<view class="action-area">
+		<button class="action-button" type="primary" bindtap="sureAction">确定</button>
+		<view class="center-area">
+			<image wx:if="{{isGoingToAction}}" src="{{afterActionImage}}" class="after-action-image" animation="{{afterActionAnimationData}}"></image>
+			<image wx:else src="{{beforeActionImage}}" class="before-action-image" animation="{{beforeActionAnimationData}}"></image>
+		</view>
+		<button class="action-button" bindtap="cancelAction">取消</button>
+	</view>
+</template>
