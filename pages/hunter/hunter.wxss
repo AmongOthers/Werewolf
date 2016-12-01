@@ -1,0 +1,130 @@
+.container {
+    justify-content: flex-start;
+    padding-top: 0;
+    padding-bottom: 0;
+    flex-grow: 1;
+}
+.titlebar {
+    width: 100%;
+    height: 120rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgray;
+}
+.titlebar-name {
+    padding-left: 24rpx;
+    padding-right: 24rpx;
+    color: white;
+}
+.titlebar-image {
+    width: 80rpx;
+    height: 80rpx;
+}
+.titlebar-left {
+    transform:  rotateY(180deg);
+}
+.ground-container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.ground {
+  width: 100%;
+  height: 1rpx;
+  flex-grow: 1;
+  padding: 0rpx 0rpx;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: flex-start;
+}
+.player-stub {
+  width: 156rpx;
+  height: 160rpx;
+  margin: 4rpx;
+}
+.player {
+  width: 156rpx;
+  height: 160rpx;
+  margin: 4rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.player-avatar {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+}
+.player-name {
+  width: 156rpx;
+  font-size: 0.8em;
+  white-space: nowrap;
+  text-align: center;
+  padding-top: 2rpx;
+}
+.action-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-end;
+  width: 100%;
+  height: 240rpx;
+}
+.action-button {
+  box-sizing: border-box;
+  width: 160rpx;
+  height: 80rpx;
+  border-radius: 0;
+  border-top-left-radius: 80rpx;
+  border-top-right-radius: 80rpx;
+  text-align: center;
+}
+.hunter-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400rpx;
+  height: 200rpx;
+  border-top-left-radius: 200rpx;
+  border-top-right-radius: 200rpx;
+  border-top: 2px solid lightgray;
+  border-left: 2px solid lightgray;
+  border-right: 2px solid lightgray;
+}
+button::after {
+  border: 0;
+}
+.bow-arrow-image {
+  width: 186rpx;
+  height: 172rpx;
+}
+.bow-image {
+  width: 186rpx;
+  height: 54rpx;
+}
+.current-marking-avatar {
+  width: 96rpx;
+  height: 96rpx;
+}
+.hunter-ground {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0; 
+  left: 0;
+  box-sizing: border-box;
+}

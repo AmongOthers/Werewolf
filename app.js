@@ -3,6 +3,19 @@ var eventbus = require("js/EventBus.js");
 //app.js
 App({
   onLaunch: function () {
+    wx.getSystemInfo({
+      success: function (res) {
+        var windowWidth = res.windowWidth;
+        this.globalData.windowWidth = windowWidth;
+        var windowHeight = res.windowHeight;
+        this.globalData.windowHeight = windowHeight;
+        var pxRatio = 750 / windowWidth;
+        this.globalData.pxRatio = pxRatio;
+        //窗口高度已经自动减去了导航栏高度(84rpx)
+        console.log("(SystemInfo)" + "windowWidth: " + windowWidth + " windowHeight: " + windowHeight + " pxRatio: " + pxRatio);
+      }.bind(this)
+    });
+
     this.initSocket();
     eventbus.addEventListener("locationUpdate", function (event, location) {
       var message = {

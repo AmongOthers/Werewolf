@@ -1,0 +1,47 @@
+<view class="container">
+	<view class="titlebar">
+		<image class="titlebar-image titlebar-left" src="{{titlebarImage}}"></image>
+		<view class="titlebar-name">猎人之章</view>
+		<image class="titlebar-image titlebar-right" src="{{titlebarImage}}"></image>
+	</view>
+	<view class="ground-container">
+		<canvas class="hunter-ground" canvas-id="hunter-ground" catchtouchstart="bowGroundTouchStart" catchtouchend="bowGroundTouchEnd" catchtouchmove="bowGroundTouchMove" ></canvas>
+	<view class="ground">
+		<view wx:for="{{players}}" class="player">
+			<block wx:if="{{index == poisonedPlayerIndex}}">
+				<image src="{{poisonAvatarImage}}" class="player-avatar poisoned-player-avatar" animation="{{poisonTargetAnimationData}}"></image>
+				<view class="player-name">{{item.name}}</view>
+			</block>
+			<block wx:elif="{{index == killedPlayerIndex}}">
+				<image src="{{item.avatar}}" class="player-avatar"></image>
+				<view class="player-name">{{item.name}}</view>
+				<image src="{{clawmarkImage}}" class="clawmark" animation="{{healAnimationData}}"></image>
+				<image wx:if="{{!isHealed}}" src="{{medicineImage}}" class="medicine-flag" bindtap="medicineFlagTapped"></image>
+				<image wx:else src="{{healImage}}" class="heal"></image>
+			</block>
+			<block wx:elif="{{index == poisonPlayerIndex}}">
+				<image src="{{item.avatar}}" class="player-avatar"></image>
+				<view class="player-name">{{item.name}}</view>
+				<image src="{{poisonImage}}" class="poison-flag" bindtap="poisonFlagTapped"></image>
+			</block>
+			<block wx:elif="{{index == markingPlayerIndex}}">
+				<image src="{{item.avatar}}" class="player-avatar current-marking-avatar"></image>
+				<view class="player-name">{{item.name}}</view>
+			</block>
+			<block wx:else>
+				<image src="{{item.avatar}}" class="player-avatar"></image>
+				<view class="player-name">{{item.name}}</view>
+			</block>
+		</view>
+		<view wx:for="{{playerStubs}}" class="player-stub"></view>
+	</view>
+	<view class="action-area">
+		<button class="action-button left-action" type="primary" bindtap="leftAction">确定</button>
+		<view class="hunter-area">
+			<image wx:if="{{isGoingToFire}}" src="{{bowImage}}" class="bow-image" animation="{{bowAnimationData}}"></image>
+			<image wx:else src="{{bowAndArrowImage}}" class="bow-arrow-image" animation="{{bowAndArrowAnimationData}}"></image>
+		</view>
+		<button class="action-button right-action" bindtap="rightAction">取消</button>
+	</view>
+	</view>
+</view>

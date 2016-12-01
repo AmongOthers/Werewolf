@@ -1,8 +1,10 @@
 {
   "pages":[
+    "pages/hunter/hunter",
+    "pages/chooseRole/chooseRole",
+    "pages/witch/witch",
     "pages/playground/playground",
-    "pages/index/index",
-    "pages/chooseRole/chooseRole"
+    "pages/index/index"
   ],
   "window":{
     "backgroundTextStyle":"light",

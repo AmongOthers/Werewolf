@@ -6,7 +6,7 @@ var player = require("../../js/player.js");
 var eventbus = require("../../js/EventBus.js");
 
 //获取应用实例
-var app = getApp()
+var app = getApp();
 Page({
   data: {
     sun: "../../images/sun.png",
